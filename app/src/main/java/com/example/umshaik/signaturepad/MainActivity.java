@@ -60,7 +60,15 @@ public class MainActivity extends AppCompatActivity {
 
         mSignaturePad.clear();
         mSignaturePad.clearView();
+        mSignaturePad = null;
+
+        Log.d("SAM", "OnStop");
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

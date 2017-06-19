@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -11,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -238,6 +240,11 @@ public class SignaturePad extends View {
         if (mSignatureBitmap != null) {
             canvas.drawBitmap(mSignatureBitmap, 0, 0, mPaint);
         }
+
+        mPaint.setColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+        mPaint.setTextSize(70);
+        canvas.drawText("Hello Umair", 150, 250, mPaint);
+        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher), 130, 130, null);
     }
 
     public void setOnSignedListener(OnSignedListener listener) {
@@ -606,6 +613,10 @@ public class SignaturePad extends View {
 
     private int convertDpToPx(float dp) {
         return Math.round(getContext().getResources().getDisplayMetrics().density * dp);
+    }
+
+    public void clearAll() {
+
     }
 
     public interface OnSignedListener {
