@@ -38,6 +38,7 @@ public class SignaturePad extends View {
     private final int DEFAULT_ATTR_PEN_COLOR = Color.BLACK;
     private final float DEFAULT_ATTR_VELOCITY_FILTER_WEIGHT = 0.9f;
     private final boolean DEFAULT_ATTR_CLEAR_ON_DOUBLE_CLICK = false;
+    private final Bitmap bitmap;
     //View state
     private List<TimedPoint> mPoints;
     private boolean mIsEmpty;
@@ -64,6 +65,8 @@ public class SignaturePad extends View {
     private Paint mPaint = new Paint();
     private Bitmap mSignatureBitmap = null;
     private Canvas mSignatureBitmapCanvas = null;
+    private Paint paint;
+    private Paint circlePaint;
 
     public SignaturePad(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -92,6 +95,7 @@ public class SignaturePad extends View {
 
         //Dirty rectangle to update only the changed portion of the view
         mDirtyRect = new RectF();
+        bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
         clearView();
 
@@ -237,14 +241,25 @@ public class SignaturePad extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
         if (mSignatureBitmap != null) {
             canvas.drawBitmap(mSignatureBitmap, 0, 0, mPaint);
         }
 
         mPaint.setColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
-        mPaint.setTextSize(70);
-        canvas.drawText("Hello Umair", 150, 250, mPaint);
-        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher), 130, 130, null);
+        mPaint.setTextSize(40);
+        int xPos = (canvas.getWidth() / 2);
+        int yPos = (int) ((canvas.getHeight() / 2) - ((mPaint.descent() + mPaint.ascent()) / 2));
+        //((textPaint.descent() + textPaint.ascent()) / 2) is the distance from the baseline to the center.
+
+        canvas.drawText("Hello", xPos, yPos, mPaint);
+        //canvas.drawText("Hello Umair", getWidth()/2, getHeight()/2, mPaint);
+        //canvas.drawOval(, mPaint);
+        int centreX = (canvas.getWidth() - bitmap.getWidth()) / 2;
+
+        int centreY = (canvas.getHeight() - bitmap.getHeight()) / 2;
+        canvas.drawBitmap(bitmap, centreX, centreY, null);
+
     }
 
     public void setOnSignedListener(OnSignedListener listener) {
