@@ -10,8 +10,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -95,13 +93,13 @@ public class SignaturePad extends View {
 
         //Dirty rectangle to update only the changed portion of the view
         mDirtyRect = new RectF();
-        bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.images);
 
         clearView();
 
     }
 
-    @Override
+    /*@Override
     protected Parcelable onSaveInstanceState() {
         Bundle bundle = new Bundle();
         bundle.putParcelable("superState", super.onSaveInstanceState());
@@ -122,7 +120,7 @@ public class SignaturePad extends View {
         }
         this.mHasEditState = false;
         super.onRestoreInstanceState(state);
-    }
+    }*/
 
     /**
      * Set the pen color from a given resource.
@@ -242,6 +240,17 @@ public class SignaturePad extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        drawMyCustomSign(canvas);
+
+
+    }
+
+    private void drawMyCustomSign(Canvas canvas) {
+        //canvas.drawOval(, mPaint);
+        int centreX = (canvas.getWidth() - bitmap.getWidth()) / 2;
+
+        int centreY = (canvas.getHeight() - bitmap.getHeight()) / 2;
+        canvas.drawBitmap(bitmap, centreX, centreY, null);
         if (mSignatureBitmap != null) {
             canvas.drawBitmap(mSignatureBitmap, 0, 0, mPaint);
         }
@@ -252,14 +261,8 @@ public class SignaturePad extends View {
         int yPos = (int) ((canvas.getHeight() / 2) - ((mPaint.descent() + mPaint.ascent()) / 2));
         //((textPaint.descent() + textPaint.ascent()) / 2) is the distance from the baseline to the center.
 
-        canvas.drawText("Hello", xPos, yPos, mPaint);
+        canvas.drawText("Hello World", centreX + 80, yPos, mPaint);
         //canvas.drawText("Hello Umair", getWidth()/2, getHeight()/2, mPaint);
-        //canvas.drawOval(, mPaint);
-        int centreX = (canvas.getWidth() - bitmap.getWidth()) / 2;
-
-        int centreY = (canvas.getHeight() - bitmap.getHeight()) / 2;
-        canvas.drawBitmap(bitmap, centreX, centreY, null);
-
     }
 
     public void setOnSignedListener(OnSignedListener listener) {
@@ -279,9 +282,13 @@ public class SignaturePad extends View {
     public Bitmap getSignatureBitmap() {
         Bitmap originalBitmap = getTransparentSignatureBitmap();
         Bitmap whiteBgBitmap = Bitmap.createBitmap(originalBitmap.getWidth(), originalBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+
         Canvas canvas = new Canvas(whiteBgBitmap);
-        canvas.drawColor(Color.WHITE);
-        canvas.drawBitmap(originalBitmap, 0, 0, null);
+        drawMyCustomSign(canvas);
+
+        //canvas.drawColor(Color.WHITE);
+        //canvas.drawBitmap(originalBitmap, 0, 0, null);
+        //clearView();
         return whiteBgBitmap;
     }
 
